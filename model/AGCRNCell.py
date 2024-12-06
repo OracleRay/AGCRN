@@ -13,8 +13,8 @@ class AGCRNCell(nn.Module):
     def forward(self, x, state, node_embeddings):
         #x: B, num_nodes, input_dim
         #state: B, num_nodes, hidden_dim
-        state = state.to(x.device)
-        input_and_state = torch.cat((x, state), dim=-1)
+        state = state.to(x.device)  # 确保 state 与输入 x 在相同设备（如 GPU）上
+        input_and_state = torch.cat((x, state), dim=-1)  # 将当前输入 x 和隐藏状态 state 沿特征维度拼接
         z_r = torch.sigmoid(self.gate(input_and_state, node_embeddings))
         z, r = torch.split(z_r, self.hidden_dim, dim=-1)
         candidate = torch.cat((x, z*state), dim=-1)

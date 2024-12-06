@@ -12,6 +12,8 @@ class AVWGCN(nn.Module):
         #x shaped[B, N, C], node_embeddings shaped [N, D] -> supports shaped [N, N]
         #output shape [B, N, C]
         node_num = node_embeddings.shape[0]
+
+        # 论文中的计算自适应邻接矩阵的方法
         supports = F.softmax(F.relu(torch.mm(node_embeddings, node_embeddings.transpose(0, 1))), dim=1)
         support_set = [torch.eye(node_num).to(supports.device), supports]
         #default cheb_k = 3
